@@ -11,14 +11,16 @@ const Home = () => {
             <div className="countdownContainer">
                 <Heading>Countdown</Heading>
                 <CountDownBoxContainer />
-                <TextContent>
-                    Until the preset goals are released.<br />Till then keep hustling!
-                </TextContent>
-                <div className="fixed bottom-4 right-4 w-5">
-                    <Link to={"/broken"}>
-                        <img className="" src={NavIcon}></img>
-                    </Link>
-                </div>
+            </div>
+
+            <TextContent>
+                Until the preset goals are released.<br />Till then keep hustling!
+            </TextContent>
+
+            <div className="fixed bottom-4 right-4 w-5">
+                <Link to={"/broken"}>
+                    <img className="" alt="broken nav icon" src={NavIcon}></img>
+                </Link>
             </div>
         </div>
     );
