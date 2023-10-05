@@ -9,6 +9,8 @@ const CountDownBoxContainer = () => {
         let timer = setInterval(() => {
             // updateTimerValue(setTime);
         }, 1000);
+
+        return () => clearInterval(timer);
     }, [])
 
     return (
