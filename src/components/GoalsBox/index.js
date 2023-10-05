@@ -1,25 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import edit from "./edit.svg";
 import bin from "./bin.svg";
+import UpdateGoalDialog from "../UpdateGoalDialog";
 
-const GoalsBox = ({ children }) => {
-    const [checked, setChecked] = useState(false);
+const GoalsBox = ({ children, goal, ind }) => {
+    const [currGoal, setCurrGoal] = useState(goal)
+    const [open, setOpen] = useState(false);
+
+    // the curr goal has changed, 
+    useEffect(() => {
+        console.log("child goal reloads");
+    }, [currGoal])
+
+    function handleEdit() {
+        setOpen(true);
+    }
+
+    const handleClose = (value) => {
+        setOpen(false);
+        if (value !== currGoal) {
+            setCurrGoal(value);
+            // update the goal in document
+            console.log("goal updated");
+        }
+    };
 
     function updateChecked() {
-        setChecked(!checked);
+        setCurrGoal({ ...currGoal, checked: !currGoal.checked });
+        // update the goal in document
+        console.log("goal updated");
+    }
+
+    function handleDelete() {
+        setCurrGoal(null);
+        console.log("goal deleted");
     }
 
     return (
-        <div className="goal flex items-start my-4">
-            <input type="checkbox" checked={checked} onChange={updateChecked} className="w-7 h-7 mt-1 text-red-500" />
-            <div className="flex items-start w-10/12">
-                <span className={`${checked ? "line-through" : ""} text-3xl mx-4 text-justify w-fit`}>{children}</span>
-                <div className="flex mt-1">
-                    <img src={edit} className="w-6 mx-1 cursor-pointer" alt="edit icon" />
-                    <img src={bin} className="w-8 mx-1 cursor-pointer" alt="bin icon" />
-                </div>
-            </div>
-        </div >
+        <>
+            {currGoal &&
+                <div className="goal flex items-start my-4" key={ind}>
+                    <input type="checkbox" checked={currGoal.checked} onChange={updateChecked} className="w-7 h-7 mt-1 text-red-500" />
+                    <div className="flex items-start w-10/12">
+                        <span className={`${currGoal.checked ? "line-through" : ""} text-3xl mx-4 text-justify w-fit`}>{currGoal.desc}</span>
+                        <div className="flex mt-1">
+                            <img src={edit} className="w-6 mx-1 cursor-pointer" onClick={handleEdit} alt="edit icon" />
+                            <img src={bin} className="w-8 mx-1 cursor-pointer" onClick={handleDelete} alt="bin icon" />
+                        </div>
+                    </div>
+
+                    <UpdateGoalDialog onClose={handleClose} open={open} userGoal={currGoal} />
+                </div >
+
+            }
+        </>
     );
 };
 
