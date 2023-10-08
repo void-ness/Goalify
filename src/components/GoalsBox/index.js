@@ -3,13 +3,13 @@ import edit from "./edit.svg";
 import bin from "./bin.svg";
 import UpdateGoalDialog from "../UpdateGoalDialog";
 
-const GoalsBox = ({ children, goal, ind }) => {
+const GoalsBox = ({ goal, updateUserGoal, deleteUserGoal }) => {
     const [currGoal, setCurrGoal] = useState(goal)
     const [open, setOpen] = useState(false);
 
     // the curr goal has changed, 
     useEffect(() => {
-        console.log("child goal reloads");
+        // console.log("child goal reloads");
     }, [currGoal])
 
     function handleEdit() {
@@ -19,27 +19,27 @@ const GoalsBox = ({ children, goal, ind }) => {
     const handleClose = (value) => {
         setOpen(false);
         if (value !== currGoal) {
-            setCurrGoal(value);
             // update the goal in document
-            console.log("goal updated");
+            updateUserGoal(value);
+            setCurrGoal(value);
         }
     };
 
     function updateChecked() {
-        setCurrGoal({ ...currGoal, checked: !currGoal.checked });
         // update the goal in document
-        console.log("goal updated");
+        updateUserGoal({ ...currGoal, checked: !currGoal.checked });
+        setCurrGoal({ ...currGoal, checked: !currGoal.checked });
     }
 
     function handleDelete() {
+        deleteUserGoal(currGoal._id);
         setCurrGoal(null);
-        console.log("goal deleted");
     }
 
     return (
         <>
             {currGoal &&
-                <div className="goal flex items-start my-4" key={ind}>
+                <div className="goal flex items-start my-4">
                     <input type="checkbox" checked={currGoal.checked} onChange={updateChecked} className="w-7 h-7 mt-1 text-red-500" />
                     <div className="flex items-start w-10/12">
                         <span className={`${currGoal.checked ? "line-through" : ""} text-3xl mx-4 text-justify w-fit`}>{currGoal.desc}</span>
