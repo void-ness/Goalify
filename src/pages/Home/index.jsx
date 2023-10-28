@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import Heading from "../../components/utilities/Heading";
 import CountDownBoxContainer from "../../components/CountDownBoxContainer";
@@ -11,16 +11,15 @@ import { fetchPendingData } from "../../utils/api";
 
 const Home = () => {
     const [goals, setGoals] = useState([]);
+    const { username } = useParams();
 
     useEffect(() => {
         fetchGoals();
     }, [])
 
     const fetchGoals = () => {
-        fetchPendingData().then((data) => {
-            if (data) {
-                setGoals(data)
-            }
+        fetchPendingData(username).then((data) => {
+            setGoals(data)
         });
     }
 

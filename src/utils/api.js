@@ -1,19 +1,22 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:4000/Goals"
+const baseURL = process.env.REACT_APP_BASE_URL;
 
-const fetchData = async () => {
+//fetching publically available goals
+const fetchPendingData = async (username) => {
     try {
-        const results = await axios.get(baseURL);
+        const results = await axios.get(`${baseURL}/goals/pending/${username}`);
         return results.data;
     } catch (error) {
-        console.log(error);
+        console.error("Error fetching records: ", error.response.data);
+        return [];
     }
 }
 
-const fetchPendingData = async () => {
+//fetching goals protected behind authentication wall
+const fetchData = async () => {
     try {
-        const results = await axios.get(`${baseURL}/pending`);
+        const results = await axios.get(baseURL);
         return results.data;
     } catch (error) {
         console.log(error);
