@@ -18,9 +18,15 @@ const Home = () => {
     }, [])
 
     const fetchGoals = () => {
-        fetchPendingData(username).then((data) => {
-            setGoals(data)
-        });
+        fetchPendingData(username)
+            .then((data) => {
+                if (data) {
+                    setGoals(data)
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     return (
