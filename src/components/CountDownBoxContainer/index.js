@@ -14,7 +14,7 @@ const CountDownBoxContainer = () => {
     }, [])
 
     return (
-        <div className="grid grid-cols-4 w-1/2 mx-auto mt-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-10 w-5/6 md:w-3/4 xl:w-1/2 mx-auto mt-10 md:mt-16">
             <CountDownBox value={time.days}>
                 Days
             </CountDownBox>

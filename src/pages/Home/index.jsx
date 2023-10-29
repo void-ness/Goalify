@@ -30,7 +30,7 @@ const Home = () => {
     }
 
     return (
-        <div className="pt-10">
+        <div className="mt-16 md:mt-10">
             <div className="countdownContainer">
                 <Heading>Countdown</Heading>
                 <CountDownBoxContainer />
