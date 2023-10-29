@@ -1,6 +1,27 @@
 import axios from "axios";
+import { AUTH_TOKEN } from "../constants";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
+
+const setAuthorizationHeader = () => {
+    const token = localStorage.getItem(AUTH_TOKEN);
+
+    if (token) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+
+    else {
+        axios.defaults.headers.common["Authorization"] = null;
+    }
+};
+
+const isValidUser = () => {
+    const token = localStorage.getItem(AUTH_TOKEN);
+
+    if (!token) return false;
+
+    return true;
+}
 
 // should return a token on successful login
 // an error of invalid credentials if login not successful
@@ -60,4 +81,4 @@ const registerUser = async (user) => {
     }
 }
 
-export { loginUser, registerUser };
+export { loginUser, registerUser, setAuthorizationHeader, isValidUser };

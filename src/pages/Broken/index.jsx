@@ -148,7 +148,7 @@ const Broken = () => {
             </TextContent>
 
             <div className="fixed bottom-4 right-4 w-5">
-                <Link to={"/"}>
+                <Link onClick={() => navigate(-1)}>
                     <img className="" alt="home sceen nav icon" src={NavIcon}></img>
                 </Link>
             </div>
