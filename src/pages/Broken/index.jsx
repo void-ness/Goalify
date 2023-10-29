@@ -15,8 +15,20 @@ const Broken = () => {
         newUser: false
     });
     const [errorData, setErrorData] = useState({ state: false, msg: "" });
+    const [easterCounter, setEasterCounter] = useState(0);
 
     const navigate = useNavigate();
+
+    const handleEasterClick = () => {
+        if (easterCounter >= 2) {
+            setFormData({ ...formData, newUser: !formData.newUser });
+        }
+
+        else {
+            setEasterCounter(easterCounter + 1);
+        }
+
+    }
 
     const handleFormSubmit = () => {
         if (!formData.newUser) {
@@ -139,8 +151,8 @@ const Broken = () => {
                     <span>
                         This page is
                     </span>
-                    <button className={`${formData.newUser ? "line-through" : ""} ml-2`}
-                        onClick={() => setFormData({ ...formData, newUser: !formData.newUser })}
+                    <button className={`${formData.newUser ? "line-through" : "animate-[pulse_2s_cubic-bezier(0.4,_0,_0.6,_1)_3]"} ml-2`}
+                        onClick={() => handleEasterClick()}
                     >broken</button>
                     <span className="ml-2 mt-2 md:mt-0 inline-block">
                         {formData.newUser ? "fixed" : ""}
