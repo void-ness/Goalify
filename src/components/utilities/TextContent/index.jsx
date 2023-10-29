@@ -1,8 +1,8 @@
 import React from "react";
 
-const TextContent = ({ children }) => {
+const TextContent = ({ children, align }) => {
     return (
-        <div className="text-center text-4xl mt-24">
+        <div className="text-center text-4xl mt-20" style={{ textAlign: align ?? "center" }}>
             {children}
         </div>
     );
