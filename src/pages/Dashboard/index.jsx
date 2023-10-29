@@ -100,13 +100,13 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="pt-10">
+        <div className="pt-16 pb-20">
             <div className="countdownContainer">
                 <Heading>Countdown</Heading>
                 <CountDownBoxContainer />
             </div>
 
-            <div className="goalsContainer w-7/12 mx-auto flex flex-col mt-16">
+            <div className="goalsContainer w-5/6 md:w-7/12 mx-auto flex flex-col mt-16">
                 {
                     (goals && goals.length !== 0) &&
                     (
@@ -122,7 +122,9 @@ const Dashboard = () => {
                 {
                     (goals && goals.length === 0) &&
                     (
-                        <TextContent align={"left"}>No goals found. Create your first by clicking the button below</TextContent>
+                        <div className="text-3xl md:text-4xl mb-6">
+                            No goals found. Create your first by clicking the button below
+                        </div>
                     )
                 }
 

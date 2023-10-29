@@ -30,7 +30,7 @@ const Home = () => {
     }
 
     return (
-        <div className="mt-16 md:mt-10">
+        <div className="pt-16 pb-20">
             <div className="countdownContainer">
                 <Heading>Countdown</Heading>
                 <CountDownBoxContainer />
@@ -38,10 +38,17 @@ const Home = () => {
 
             {(!goals || goals.length === 0) ? (
                 <TextContent>
-                    Until the preset goals are released.<br />Till then keep hustling!
+                    <div className="flex flex-col">
+                        <span>
+                            Until the preset goals are released.
+                        </span>
+                        <span className="mt-6 md:mt-4">
+                            Till then keep hustling!
+                        </span>
+                    </div>
                 </TextContent>
             ) : (
-                <div className="goalsContainer w-7/12 mx-auto flex flex-col mt-20">
+                <div className="goalsContainer w-5/6 md:w-7/12 mx-auto flex flex-col mt-16 md:mt-20">
                     {goals.map((goal, ind) => {
                         return (
                             <GoalsBoxViewOnly key={ind} goal={goal}></GoalsBoxViewOnly>

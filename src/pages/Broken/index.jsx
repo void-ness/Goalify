@@ -58,12 +58,12 @@ const Broken = () => {
         }
     }
     return (
-        <div className="pt-10">
+        <div className="pt-16 pb-20">
             <Heading>{formData.newUser ? "Fixed" : "Broken"}</Heading>
 
-            <div className="userInputContainer w-1/2 mx-auto mt-10">
+            <div className="userInputContainer w-5/6 xl:w-1/2 mx-auto mt-10">
                 <form className="flex flex-col items-center">
-                    <div className="userInput grid grid-rows-2 my-3 w-1/2">
+                    <div className="userInput grid grid-rows-2 my-3 w-5/6 md:w-1/2">
                         <label htmlFor="username" className="text-2xl mb-2">Problem</label>
                         <input
                             type="text"
@@ -78,7 +78,7 @@ const Broken = () => {
                         />
                     </div>
 
-                    <div className="userInput grid grid-rows-2 my-3 w-1/2">
+                    <div className="userInput grid grid-rows-2 my-3 w-5/6 md:w-1/2">
                         <label htmlFor="pass" className="text-2xl mb-2">Solution</label>
                         <input
                             type="password"
@@ -94,7 +94,7 @@ const Broken = () => {
                     </div>
 
                     {formData.newUser && (
-                        <div className="userInput grid grid-rows-2 my-3 w-1/2">
+                        <div className="userInput grid grid-rows-2 my-3 w-5/6 md:w-1/2">
                             <label htmlFor="email" className="text-2xl mb-2">e-Address</label>
                             <input
                                 type="email"
@@ -110,7 +110,7 @@ const Broken = () => {
                         </div>)}
 
                     {formData.newUser && (
-                        <div className="userInput grid grid-rows-2 my-3 w-1/2">
+                        <div className="userInput grid grid-rows-2 my-3 w-5/6 md:w-1/2">
                             <label htmlFor="name" className="text-2xl mb-2">Pseudoname</label>
                             <input
                                 type="text"
@@ -127,7 +127,7 @@ const Broken = () => {
                     )}
 
                     {errorData.state && (
-                        <div className="w-1/2 mt-4">
+                        <div className="w-5/6 md:w-1/2 mt-4">
                             <span className="text-red-500 text-left text-lg">{errorData.msg}</span>
                         </div>
                     )}
@@ -136,14 +136,22 @@ const Broken = () => {
 
             <TextContent>
                 <div>
-                    This page is <button className={`${formData.newUser ? "line-through" : ""}`}
+                    <span>
+                        This page is
+                    </span>
+                    <button className={`${formData.newUser ? "line-through" : ""} ml-2`}
                         onClick={() => setFormData({ ...formData, newUser: !formData.newUser })}
-                    > broken</button>
-                    {formData.newUser ? " fixed" : ""}.
+                    >broken</button>
+                    <span className="ml-2 mt-2 md:mt-0 inline-block">
+                        {formData.newUser ? "fixed" : ""}
+                    </span>
                 </div>
 
                 <div className="mt-2">
-                    <button type="button" onClick={handleFormSubmit}>Go</button> back to home!
+                    <button type="button" onClick={handleFormSubmit} className="mr-2">Go</button>
+                    <span>
+                        back to home!
+                    </span>
                 </div>
             </TextContent>
 

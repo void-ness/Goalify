@@ -36,15 +36,21 @@ const UpdateGoalDialog = ({ onClose, userGoal, open }) => {
     }
 
     return (
-        <Dialog open={open} onClose={handleClose}>
-            <div className="userGoalInputContainer flex-col flex items-center px-6 py-8 bg-gradient-to-r from-neutral-400/80 to-neutral-900/90">
-                <div className="userInput grid grid-rows-2 mb-12 w-full">
-                    <label htmlFor="username" className="text-2xl mb-2">Update Goal</label>
+        <Dialog open={open} onClose={handleClose} >
+            <div className="userGoalInputContainer flex-col flex items-center px-6 py-8 bg-gradient-to-tr from-zinc-400 to-zinc-700">
+                <div className="userInput flex flex-col mb-12">
+                    <label htmlFor="username" className="text-2xl mb-4 text-white">Update Goal</label>
 
-                    <input type="text" value={updatedGoal.desc} onChange={(e) => setUpdatedGoal({ ...updatedGoal, desc: e.target.value })} placeholder="Enter your updated goal" id="username" className="outline-none rounded-md bg-slate-100 text-black px-3 w-96 text-xl transition-all ease-in" />
+                    <input
+                        type="text"
+                        value={updatedGoal.desc}
+                        onChange={(e) => setUpdatedGoal({ ...updatedGoal, desc: e.target.value })}
+                        placeholder="Enter your updated goal"
+                        id="username"
+                        className="outline-none rounded-md bg-slate-100 focus-visible:bg-black/25 text-black focus-visible:text-white py-1 px-3 md:w-96 text-lg transition-all ease-in" />
                 </div>
 
-                <button className="text-black bg-slate-300 hover:bg-slate-100 hover:font-bold px-4 py-1 rounded-lg self-end transition-all ease-in" onClick={() => handleUpdateGoal()}>POST</button>
+                <button className="text-white bg-black/25 hover:bg-black/50 px-4 py-1 rounded-lg self-end transition-all ease-in" onClick={() => handleUpdateGoal()}>POST</button>
             </div>
         </Dialog>
     );
