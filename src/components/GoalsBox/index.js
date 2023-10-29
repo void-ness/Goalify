@@ -7,10 +7,9 @@ const GoalsBox = ({ goal, updateUserGoal, deleteUserGoal }) => {
     const [currGoal, setCurrGoal] = useState(goal)
     const [open, setOpen] = useState(false);
 
-    // the curr goal has changed, 
     useEffect(() => {
-        // console.log("child goal reloads");
-    }, [currGoal])
+        setCurrGoal(goal);
+    }, [goal])
 
     function handleEdit() {
         setOpen(true);
@@ -18,22 +17,17 @@ const GoalsBox = ({ goal, updateUserGoal, deleteUserGoal }) => {
 
     const handleClose = (value) => {
         setOpen(false);
-        if (value !== currGoal) {
-            // update the goal in document
+        if (value && (value.desc !== currGoal.desc)) {
             updateUserGoal(value);
-            setCurrGoal(value);
         }
     };
 
     function updateChecked() {
-        // update the goal in document
         updateUserGoal({ ...currGoal, checked: !currGoal.checked });
-        setCurrGoal({ ...currGoal, checked: !currGoal.checked });
     }
 
     function handleDelete() {
         deleteUserGoal(currGoal._id);
-        setCurrGoal(null);
     }
 
     return (

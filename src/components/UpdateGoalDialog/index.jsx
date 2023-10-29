@@ -8,13 +8,18 @@ const UpdateGoalDialog = ({ onClose, userGoal, open }) => {
     // this runs when user clicks outside of modal to close it
     const handleClose = () => {
         if (updatedGoal.desc === "") {
-            alert("Please enter a valid desc");
+            onClose(null);
+            setUpdatedGoal(userGoal);
             return;
         }
 
         else {
-            onClose(userGoal);
-            setUpdatedGoal(userGoal);
+            let confirmation = window.confirm("You haven't updated your goal. Do you want to go back without updating?");
+            if (confirmation) {
+                onClose(null);
+                setUpdatedGoal(userGoal);
+                return;
+            }
         }
     }
 
