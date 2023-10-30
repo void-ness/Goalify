@@ -147,7 +147,7 @@ const Broken = () => {
             </div>
 
             <TextContent>
-                <div>
+                <div className="font-light">
                     <span>
                         This page is
                     </span>
@@ -159,8 +159,8 @@ const Broken = () => {
                     </span>
                 </div>
 
-                <div className="mt-2">
-                    <button type="button" onClick={handleFormSubmit} className="mr-2">Go</button>
+                <div className="mt-2 font-light">
+                    <button type="button" onClick={handleFormSubmit} className="mr-2 font-bold">Go</button>
                     <span>
                         back to home!
                     </span>
