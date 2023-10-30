@@ -7,7 +7,7 @@ const CountDownBoxContainer = () => {
 
     useEffect(() => {
         let timer = setInterval(() => {
-            // updateTimerValue(setTime);
+            updateTimerValue(setTime);
         }, 1000);
 
         return () => clearInterval(timer);
