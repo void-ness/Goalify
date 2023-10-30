@@ -6,11 +6,11 @@ import CountDownBoxContainer from "../../components/CountDownBoxContainer";
 import GoalsBox from "../../components/GoalsBox";
 
 import NavIcon from "./navIcon2.svg";
+import NavIcon2 from "./navIcon3.svg";
 import addIcon from "./add.svg";
 import AddGoalDialog from "../../components/AddGoalDialog";
-import { fetchData, addGoal, updateGoal, deleteGoal } from "../../utils/api";
+import { fetchData, addGoal, updateGoal, deleteGoal, fetchUsername } from "../../utils/api";
 import { isValidUser } from "../../utils/auth";
-import TextContent from "../../components/utilities/TextContent";
 import { AUTH_TOKEN } from "../../constants";
 
 const Dashboard = () => {
@@ -99,6 +99,22 @@ const Dashboard = () => {
         }
     };
 
+    const generateUsername = () => {
+        fetchUsername()
+            .then((data) => {
+                if (data) {
+                    const username = data.username;
+                    const origin = window.location.origin;
+                    const homePageLink = `${origin}/home/${username}`;
+                    alert(`Here's your shareable public goals link - ${homePageLink}`);
+                }
+            })
+            .catch((err) => {
+                alert("Unable to generate shareable link");
+                console.error(err);
+            })
+    }
+
     return (
         <div className="pt-16 pb-20">
             <div className="countdownContainer">
@@ -133,9 +149,17 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="fixed bottom-4 right-4 w-5">
+            <div className="fixed bottom-4 right-4 flex flex-col md:flex-row">
+                <button
+                    onClick={() => generateUsername()}
+                    className="w-5 mb-4 md:mb-0 md:mr-4"
+                >
+                    <img className="" alt="broken nav icon" src={NavIcon2}></img>
+                </button>
+
                 <Link to={"/broken"}
                     onClick={() => localStorage.removeItem(AUTH_TOKEN)}
+                    className="w-5"
                 >
                     <img className="" alt="broken nav icon" src={NavIcon}></img>
                 </Link>

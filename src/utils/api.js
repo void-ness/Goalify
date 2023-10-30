@@ -124,4 +124,28 @@ const deleteGoal = async (GoalId) => {
     }
 }
 
-export { fetchData, addGoal, updateGoal, deleteGoal, fetchPendingData };
+const fetchUsername = async () => {
+    try {
+        const token = localStorage.getItem(AUTH_TOKEN);
+
+        const result = await axios.get(
+            `${baseURL}/user/username`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+        return result.data;
+    } catch (error) {
+        const errorMsg = error.response?.data.error.message;
+
+        if (errorMsg) {
+            throw new Error(errorMsg)
+        } else {
+            throw new Error("Failed to add new goal");
+        }
+    }
+}
+
+export { fetchData, addGoal, updateGoal, deleteGoal, fetchPendingData, fetchUsername };
