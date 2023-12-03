@@ -3,13 +3,14 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Home from './pages/Home';
 import Broken from './pages/Broken';
 import Dashboard from './pages/Dashboard';
+import Landing from './pages/Landing';
 
 function App() {
 
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Navigate to={`/home/void-ness`} />} />
+        <Route path='/' element={<Landing />}></Route>
         <Route path='/home/:username' element={<Home />}></Route>
         <Route path='/fix' element={<Dashboard />}></Route>
         <Route path='/broken' element={<Broken />}></Route>
