@@ -12,10 +12,13 @@ import AddGoalDialog from "../../components/AddGoalDialog";
 import { fetchData, addGoal, updateGoal, deleteGoal, fetchUsername } from "../../utils/api";
 import { isValidUser } from "../../utils/auth";
 import { AUTH_TOKEN } from "../../constants";
+import LinkDialog from "../../components/LinkDialog";
 
 const Dashboard = () => {
     const [open, setOpen] = useState(false);
     const [goals, setGoals] = useState([]);
+    const [linkDialogOpen, setLinkDialogOpen] = useState(false);
+    const [shareLink, setShareLink] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -106,12 +109,15 @@ const Dashboard = () => {
                     const username = data.username;
                     const origin = window.location.origin;
                     const homePageLink = `${origin}/home/${username}`;
-                    alert(`Here's your shareable public goals link - ${homePageLink}`);
+                    setShareLink(homePageLink);
+                    setLinkDialogOpen(!linkDialogOpen);
                 }
             })
             .catch((err) => {
-                alert("Unable to generate shareable link");
+                // alert("Unable to generate shareable link");
                 console.error(err);
+                setShareLink("Unable to generate shareable link");
+                setLinkDialogOpen(!linkDialogOpen);
             })
     }
 
@@ -164,6 +170,8 @@ const Dashboard = () => {
                     <img className="" alt="broken nav icon" src={NavIcon}></img>
                 </Link>
             </div>
+
+            <LinkDialog open={linkDialogOpen} link={shareLink} onClose={setLinkDialogOpen} />
 
             <AddGoalDialog onClose={addUserGoal} open={open} />
         </div>
