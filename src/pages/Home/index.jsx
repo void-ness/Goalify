@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import Confetti from 'react-confetti';
 
 import Heading from "../../components/utilities/Heading";
 import CountDownBoxContainer from "../../components/CountDownBoxContainer";
@@ -10,6 +11,8 @@ import NavIcon from "./navIcon.svg";
 import { fetchPendingData } from "../../utils/api";
 
 const Home = () => {
+    // const demoGoals = [{ desc: "This is a demo goal", checked: true }];
+    // const [goals, setGoals] = useState(demoGoals);
     const [goals, setGoals] = useState([]);
     const { username } = useParams();
 
@@ -48,13 +51,25 @@ const Home = () => {
                     </div>
                 </TextContent>
             ) : (
-                <div className="goalsContainer w-5/6 md:w-7/12 mx-auto flex flex-col mt-16 md:mt-20">
-                    {goals.map((goal, ind) => {
-                        return (
-                            <GoalsBoxViewOnly key={ind} goal={goal}></GoalsBoxViewOnly>
-                        )
-                    })}
-                </div>
+                <>
+                    <Confetti
+                        numberOfPieces={600}
+                        recycle={false}
+                    />
+
+                    <TextContent>
+                        Congratulations! You have done it
+                    </TextContent>
+
+                    <div className="goalsContainer w-5/6 md:w-7/12 mx-auto flex flex-col mt-16 md:mt-20">
+
+                        {goals.map((goal, ind) => {
+                            return (
+                                <GoalsBoxViewOnly key={ind} goal={goal}></GoalsBoxViewOnly>
+                            )
+                        })}
+                    </div>
+                </>
             )}
 
             <div className="fixed bottom-4 right-4 w-5">
