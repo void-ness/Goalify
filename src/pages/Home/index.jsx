@@ -53,8 +53,9 @@ const Home = () => {
             ) : (
                 <>
                     <Confetti
-                        numberOfPieces={600}
+                        numberOfPieces={2000}
                         recycle={false}
+                        className="w-full"
                     />
 
                     <TextContent>

@@ -14,7 +14,7 @@ const fetchPendingData = async (username) => {
         if (errorMsg) {
             throw new Error(errorMsg)
         } else {
-            throw new Error("Login Unsuccessful");
+            throw new Error("Unable to fetch goals");
         }
     }
 }
