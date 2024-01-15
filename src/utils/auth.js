@@ -3,18 +3,6 @@ import { AUTH_TOKEN } from "../constants";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 
-const setAuthorizationHeader = () => {
-    const token = localStorage.getItem(AUTH_TOKEN);
-
-    if (token) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-
-    else {
-        axios.defaults.headers.common["Authorization"] = null;
-    }
-};
-
 const isValidUser = () => {
     const token = localStorage.getItem(AUTH_TOKEN);
 
@@ -42,7 +30,6 @@ const loginUser = async (user) => {
         );
 
         return result;
-        // console.log(results);
     } catch (error) {
         const errorMsg = error.response?.data.error.message;
 
@@ -81,4 +68,4 @@ const registerUser = async (user) => {
     }
 }
 
-export { loginUser, registerUser, setAuthorizationHeader, isValidUser };
+export { loginUser, registerUser, isValidUser };
