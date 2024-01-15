@@ -11,9 +11,11 @@ import NavIcon from "./navIcon.svg";
 import { fetchPendingData } from "../../utils/api";
 
 const Home = () => {
+    // for debuggin purposes
     // const demoGoals = [{ desc: "This is a demo goal", checked: true }];
     // const [goals, setGoals] = useState(demoGoals);
-    const [goals, setGoals] = useState([]);
+
+    const [goals, setGoals] = useState("");
     const { username } = useParams();
 
     useEffect(() => {
@@ -33,13 +35,13 @@ const Home = () => {
     }
 
     return (
-        <div className="pt-16 pb-20">
+        <div className="pt-16 pb-20 relative">
             <div className="countdownContainer">
                 <Heading>Countdown</Heading>
                 <CountDownBoxContainer />
             </div>
 
-            {(!goals || goals.length === 0) ? (
+            {(goals && goals.length === 0) && (
                 <TextContent>
                     <div className="flex flex-col">
                         <span>
@@ -50,12 +52,14 @@ const Home = () => {
                         </span>
                     </div>
                 </TextContent>
-            ) : (
+            )}
+
+            {(goals && goals.length !== 0) && (
                 <>
                     <Confetti
                         numberOfPieces={2000}
                         recycle={false}
-                        className="w-full"
+                        className="w-full h-full"
                     />
 
                     <TextContent>
@@ -63,7 +67,6 @@ const Home = () => {
                     </TextContent>
 
                     <div className="goalsContainer w-5/6 md:w-7/12 mx-auto flex flex-col mt-16 md:mt-20">
-
                         {goals.map((goal, ind) => {
                             return (
                                 <GoalsBoxViewOnly key={ind} goal={goal}></GoalsBoxViewOnly>
