@@ -9,6 +9,7 @@ import GoalsBoxViewOnly from "../../components/GoalsBoxViewOnly";
 
 import NavIcon from "./navIcon.svg";
 import { fetchPendingData } from "../../utils/api";
+import { isNewYearWeek } from "../../utils/countdown";
 
 const Home = () => {
     // for debuggin purposes
@@ -23,15 +24,21 @@ const Home = () => {
     }, [])
 
     const fetchGoals = () => {
-        fetchPendingData(username)
-            .then((data) => {
-                if (data) {
-                    setGoals(data)
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+        if (isNewYearWeek()) {
+            fetchPendingData(username)
+                .then((data) => {
+                    if (data) {
+                        setGoals(data)
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
+
+        else {
+            setGoals([]);
+        }
     }
 
     return (
