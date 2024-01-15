@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import Heading from "../../components/utilities/Heading";
 import { Link, useNavigate } from "react-router-dom";
-import NavIcon from "./navIcon.svg";
+
+import Heading from "../../components/utilities/Heading";
 import TextContent from "../../components/utilities/TextContent";
+
+import HomeIcon from "./navIcon.svg";
+import BackIcon from "./navIcon2.svg";
+
 import { loginUser, registerUser } from "../../utils/auth";
 import { AUTH_TOKEN } from "../../constants";
 
@@ -14,9 +18,9 @@ const Broken = () => {
         name: "",
         newUser: false
     });
+
     const [errorData, setErrorData] = useState({ state: false, msg: "" });
     const [easterCounter, setEasterCounter] = useState(0);
-
     const navigate = useNavigate();
 
     const handleEasterClick = () => {
@@ -27,7 +31,6 @@ const Broken = () => {
         else {
             setEasterCounter(easterCounter + 1);
         }
-
     }
 
     const handleFormSubmit = () => {
@@ -167,9 +170,15 @@ const Broken = () => {
                 </div>
             </TextContent>
 
-            <div className="fixed bottom-4 right-4 w-5">
-                <Link onClick={() => navigate(-1)}>
-                    <img className="" alt="home sceen nav icon" src={NavIcon}></img>
+            <div className="fixed bottom-4 right-4 flex flex-col md:flex-row">
+                <Link onClick={() => navigate(-1)} className="w-5 mb-4 md:mb-0 md:mr-4">
+                    <img className="" alt="home sceen nav icon" src={BackIcon}></img>
+                </Link>
+
+                <Link to={"/"}
+                    className="w-5"
+                >
+                    <img className="" alt="home sceen nav icon" src={HomeIcon}></img>
                 </Link>
             </div>
         </div>

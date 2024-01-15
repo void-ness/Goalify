@@ -60,8 +60,8 @@ const registerUser = async (user) => {
     } catch (error) {
         const errorMsg = error.response?.data.error.message;
 
-        if (errorMsg) {
-            throw new Error(errorMsg);
+        if (errorMsg || error.message) {
+            throw new Error(errorMsg ? errorMsg : error.message);
         } else {
             throw new Error("Signup unsuccessful");
         }
