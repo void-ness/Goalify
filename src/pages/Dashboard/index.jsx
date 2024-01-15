@@ -9,14 +9,15 @@ import NavIcon from "./navIcon2.svg";
 import NavIcon2 from "./navIcon3.svg";
 import addIcon from "./add.svg";
 import AddGoalDialog from "../../components/AddGoalDialog";
-import { fetchData, addGoal, updateGoal, deleteGoal, fetchUsername } from "../../utils/api";
+import { renderGoals, handleGoalAddition, handleGoalUpdation, handleGoalDeletion, renderShareLink } from "../../utils/uiHelper";
+
 import { isValidUser } from "../../utils/auth";
 import { AUTH_TOKEN } from "../../constants";
 import LinkDialog from "../../components/LinkDialog";
 
 const Dashboard = () => {
     const [open, setOpen] = useState(false);
-    const [goals, setGoals] = useState([]);
+    const [goals, setGoals] = useState("");
     const [linkDialogOpen, setLinkDialogOpen] = useState(false);
     const [shareLink, setShareLink] = useState("");
     const navigate = useNavigate();
@@ -26,100 +27,12 @@ const Dashboard = () => {
             navigate('/broken');
             return;
         }
-        fetchGoals();
+        renderGoals(setGoals);
     }, [])
-
-    const fetchGoals = () => {
-        fetchData()
-            .then((data) => {
-                if (data) {
-                    setGoals(data);
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-            })
-    }
-
-    const updateUserGoal = (goal) => {
-        if (goal) {
-            updateGoal(goal)
-                .then((newGoal) => {
-                    delete newGoal.__v;
-
-                    let updatedGoals = [...goals];
-                    updatedGoals = updatedGoals.map((currGoal) => {
-                        if (currGoal._id === newGoal._id) {
-                            return newGoal;
-                        }
-
-                        else {
-                            return currGoal;
-                        }
-                    })
-                    setGoals(updatedGoals);
-                })
-                .catch((err) => {
-                    alert("Unable to update goal");
-                    console.error(err);
-                })
-        }
-    }
-
-    const deleteUserGoal = (id) => {
-        deleteGoal(id)
-            .then((data) => {
-                if (data) {
-                    let updatedGoalsList = goals;
-                    updatedGoalsList = updatedGoalsList.filter((elem) => elem._id !== id);
-                    setGoals(updatedGoalsList);
-                }
-            })
-            .catch((err) => {
-                alert("Unable to delete goal");
-                console.error(err);
-            })
-    }
 
     const handleClickOpen = () => {
         setOpen(true);
     };
-
-    const addUserGoal = (value) => {
-        setOpen(false);
-        if (value) {
-            addGoal(value)
-                .then((data) => {
-                    if (data) {
-                        delete data.__v;
-                        setGoals([...goals, data])
-                    }
-                })
-                .catch((err) => {
-                    alert("Unable to add new goal");
-                    console.error(err);
-                })
-        }
-    };
-
-    const generateUsername = () => {
-        fetchUsername()
-            .then((data) => {
-                if (data) {
-                    const username = data.username;
-                    const origin = window.location.origin;
-                    const homePageLink = `${origin}/home/${username}`;
-                    setShareLink(homePageLink);
-                    setLinkDialogOpen(!linkDialogOpen);
-                }
-            })
-            .catch((err) => {
-                // alert("Unable to generate shareable link");
-                console.error(err);
-                setShareLink("Unable to generate shareable link");
-                setLinkDialogOpen(!linkDialogOpen);
-            })
-    }
 
     return (
         <div className="pt-16 pb-20">
@@ -134,7 +47,12 @@ const Dashboard = () => {
                     (
                         goals.map((goal, ind) => {
                             return (
-                                <GoalsBox key={ind} goal={goal} updateUserGoal={updateUserGoal} deleteUserGoal={deleteUserGoal}></GoalsBox>
+                                <GoalsBox
+                                    key={ind}
+                                    goal={goal}
+                                    updateUserGoal={(goal) => handleGoalUpdation(goal, goals, setGoals)}
+                                    deleteUserGoal={(id) => handleGoalDeletion(id, setGoals, goals)}
+                                ></GoalsBox>
                             )
                         })
 
@@ -157,7 +75,7 @@ const Dashboard = () => {
 
             <div className="fixed bottom-4 right-4 flex flex-col md:flex-row">
                 <button
-                    onClick={() => generateUsername()}
+                    onClick={() => renderShareLink(setShareLink, setLinkDialogOpen, linkDialogOpen)}
                     className="w-5 mb-4 md:mb-0 md:mr-4"
                 >
                     <img className="" alt="broken nav icon" src={NavIcon2}></img>
@@ -173,7 +91,7 @@ const Dashboard = () => {
 
             <LinkDialog open={linkDialogOpen} link={shareLink} onClose={setLinkDialogOpen} />
 
-            <AddGoalDialog onClose={addUserGoal} open={open} />
+            <AddGoalDialog onClose={(value) => handleGoalAddition(value, setOpen, setGoals, goals)} open={open} />
         </div>
     );
 };
