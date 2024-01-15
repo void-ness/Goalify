@@ -1,5 +1,5 @@
 function updateTimerValue(setTime) {
-    let finalDate = new Date('2024-01-01 12:00 AM');
+    let finalDate = new Date('2025-01-01 12:00 AM');
     let currDate = new Date();
     let timeDiff = finalDate.getTime() - currDate.getTime();
 
@@ -17,4 +17,12 @@ function updateTimerValue(setTime) {
     setTime(leftoverTime)
 }
 
-export default updateTimerValue;
+function isNewYearWeek() {
+    let currDate = new Date();
+    return (currDate < new Date('2025-01-08 12:00 AM')) && (currDate >= new Date('2025-01-01 12:00 AM'))
+}
+
+export {
+    updateTimerValue,
+    isNewYearWeek
+};

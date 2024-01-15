@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import CountDownBox from "./CountDownBox";
-import updateTimerValue from "../../utils/countdown";
+import { updateTimerValue } from "../../utils/countdown";
 
 const CountDownBoxContainer = () => {
     const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
     useEffect(() => {
+        updateTimerValue(setTime);
+
         let timer = setInterval(() => {
             updateTimerValue(setTime);
         }, 1000);
