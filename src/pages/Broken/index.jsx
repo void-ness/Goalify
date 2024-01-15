@@ -31,6 +31,11 @@ const Broken = () => {
         else {
             setEasterCounter(easterCounter + 1);
         }
+
+        setErrorData({
+            state: false,
+            msg: ""
+        });
     }
 
     const handleFormSubmit = () => {
