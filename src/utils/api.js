@@ -6,7 +6,13 @@ const baseURL = process.env.REACT_APP_BASE_URL;
 //fetching publically available goals
 const fetchPendingData = async (username) => {
     try {
-        const results = await axios.get(`${baseURL}/goals/pending/${username}`);
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        const results = await axios.get(`${baseURL}/goals/pending/${username}`, {
+            headers: {
+                timezone: userTimezone
+            }
+        });
         return results.data;
     } catch (error) {
         const errorMsg = error.response?.data.error.message;
