@@ -52,7 +52,8 @@ const addGoal = async (goal) => {
         const results = await axios.post(
             `${baseURL}/goals/`,
             {
-                desc: goal.desc
+                desc: goal.desc,
+                position: goal.position
             },
             {
                 headers: {
@@ -75,10 +76,12 @@ const addGoal = async (goal) => {
 const updateGoal = async (goal) => {
     try {
         const token = localStorage.getItem(AUTH_TOKEN);
+        // console.log(goal);
 
         const data = {
             desc: goal.desc,
-            checked: goal.checked
+            checked: goal.checked,
+            position: goal.position
         };
 
         const results = await axios.patch(

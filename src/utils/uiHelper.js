@@ -37,6 +37,64 @@ const handleGoalUpdation = (goal, goalsList, setGoals) => {
     }
 }
 
+const handleGoalPositionUpdation = (goalsList, setGoals, srcIndex, destIndex) => {
+    let updatedGoal = goalsList[srcIndex];
+
+    const updatedPosition = findGoalPosition(srcIndex, destIndex, goalsList);
+
+    updatedGoal = {
+        ...updatedGoal,
+        position: updatedPosition
+    };
+
+    updateGoal(updatedGoal)
+        .then((newGoal) => {
+            delete newGoal.__v;
+
+            let updatedGoals = [...goalsList];
+            updatedGoals.splice(srcIndex, 1);
+            updatedGoals.splice(destIndex, 0, newGoal);
+
+            setGoals(updatedGoals);
+        })
+        .catch((err) => {
+            alert("Unable to update goal");
+            console.error(err);
+        })
+}
+
+const findGoalPosition = (sourceIndex, destIndex, goalsList) => {
+    const beforeIndex = goalsList[destIndex].position;
+
+    if (sourceIndex > destIndex) {
+        // moving backwards
+        if (destIndex === 0) {
+            // it is the first goal
+            const newPosition = beforeIndex - 100;
+            return newPosition;
+        }
+
+        else {
+            const newPosition = beforeIndex - 1;
+            return newPosition;
+        }
+    }
+
+    if (sourceIndex < destIndex) {
+        // moving forwards
+        if (destIndex === (goalsList.length - 1)) {
+            // it is the last goal
+            const newPosition = beforeIndex + 100;
+            return newPosition;
+        }
+
+        else {
+            const newPosition = beforeIndex + 1;
+            return newPosition;
+        }
+    }
+}
+
 const handleGoalDeletion = (id, setGoals, goalsList) => {
     deleteGoal(id)
         .then((data) => {
@@ -55,7 +113,12 @@ const handleGoalDeletion = (id, setGoals, goalsList) => {
 const handleGoalAddition = (value, setOpen, setGoals, goalsList) => {
     setOpen(false);
     if (value) {
-        addGoal(value)
+        const newGoal = {
+            ...value,
+            position: (goalsList.length + 1) * 100,
+        };
+
+        addGoal(newGoal)
             .then((data) => {
                 if (data) {
                     delete data.__v;
@@ -91,6 +154,7 @@ export {
     handleGoalAddition,
     handleGoalDeletion,
     handleGoalUpdation,
+    handleGoalPositionUpdation,
     renderGoals,
     renderShareLink
 }
