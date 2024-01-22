@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 
 const UpdateGoalDialog = ({ onClose, userGoal, open }) => {
     // userGoal is the current goal
     const [updatedGoal, setUpdatedGoal] = useState(userGoal);
+
+    useEffect(() => {
+        setUpdatedGoal(userGoal);
+    }, [userGoal])
 
     // this runs when user clicks outside of modal to close it
     const handleClose = () => {
