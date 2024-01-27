@@ -1,4 +1,5 @@
 import axios from "axios";
+import { refreshToken } from "./auth";
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 
@@ -31,16 +32,26 @@ authFetch.interceptors.response.use(
     (response) => {
         return response;
     },
-    (error) => {
-        const origRequest = error.config;
+    async (error) => {
+        try {
+            const origRequest = error.config;
 
-        if (error.response.status === 403 && !origRequest._retry) {
-            origRequest._retry = true;
-            // add logic to refresh the token
-            return authFetch(origRequest);
+            if (error.response.status === 403 && !origRequest._retry) {
+                origRequest._retry = true;
+                const response = await refreshToken();
+
+                if (response.ok) {
+                    return authFetch(origRequest);
+                }
+            }
+
+            else {
+                return Promise.reject(error);
+            }
+        } catch (error) {
+            console.error(error);
         }
 
-        return Promise.reject(error);
     }
 )
 

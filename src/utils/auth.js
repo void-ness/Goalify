@@ -34,6 +34,22 @@ const logoutUser = async () => {
     }
 }
 
+const refreshToken = async () => {
+    try {
+        const result = await authFetch.post('/user/refresh');
+
+        return result.data;
+    } catch (error) {
+        const errorMsg = error.response?.data.error?.message;
+
+        if (errorMsg) {
+            throw new Error(errorMsg)
+        } else {
+            throw new Error("Logout Unsuccessful");
+        }
+    }
+}
+
 // should set a cookie with authToken on successful login
 // an error of invalid credentials if login not successful
 const loginUser = async (user) => {
@@ -95,5 +111,6 @@ export {
     loginUser,
     logoutUser,
     registerUser,
-    isValidUser
+    isValidUser,
+    refreshToken
 };
