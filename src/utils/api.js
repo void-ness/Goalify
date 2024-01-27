@@ -1,14 +1,11 @@
-import axios from "axios";
-import { AUTH_TOKEN } from "../constants";
-
-const baseURL = process.env.REACT_APP_BASE_URL;
+import { authFetch, publicFetch } from "./axios";
 
 //fetching publically available goals
 const fetchPendingData = async (username) => {
     try {
         const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        const results = await axios.get(`${baseURL}/goals/pending/${username}`, {
+        const results = await publicFetch.get(`/goals/pending/${username}`, {
             headers: {
                 timezone: userTimezone
             }
@@ -28,12 +25,7 @@ const fetchPendingData = async (username) => {
 //fetching goals protected behind authentication wall
 const fetchData = async () => {
     try {
-        const token = localStorage.getItem(AUTH_TOKEN);
-        const results = await axios.get(`${baseURL}/goals`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+        const results = await authFetch.get('/goals');
         return results.data;
     } catch (error) {
         const errorMsg = error.response?.data.error.message;
@@ -48,17 +40,11 @@ const fetchData = async () => {
 
 const addGoal = async (goal) => {
     try {
-        const token = localStorage.getItem(AUTH_TOKEN);
-        const results = await axios.post(
-            `${baseURL}/goals/`,
+        const results = await authFetch.post(
+            '/goals',
             {
                 desc: goal.desc,
                 position: goal.position
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
             })
 
         return results.data;
@@ -75,28 +61,21 @@ const addGoal = async (goal) => {
 
 const updateGoal = async (goal) => {
     try {
-        const token = localStorage.getItem(AUTH_TOKEN);
-        // console.log(goal);
-
         const data = {
             desc: goal.desc,
             checked: goal.checked,
             position: goal.position
         };
 
-        const results = await axios.patch(
-            `${baseURL}/goals/${goal._id}`,
-            data,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
+        const results = await authFetch.patch(
+            `/goals/${goal._id}`,
+            data
         )
 
         return results.data;
     } catch (error) {
-        const errorMsg = error.response?.data.error.message;
+        console.log(error);
+        const errorMsg = error.response?.data.error?.message;
 
         if (errorMsg) {
             throw new Error(errorMsg)
@@ -108,16 +87,11 @@ const updateGoal = async (goal) => {
 
 const deleteGoal = async (GoalId) => {
     try {
-        const token = localStorage.getItem(AUTH_TOKEN);
-
-        const results = await axios({
+        const results = await authFetch({
             method: 'delete',
-            url: `${baseURL}/goals/`,
+            url: '/goals',
             data: {
                 id: GoalId
-            },
-            headers: {
-                Authorization: `Bearer ${token}`
             }
         });
 
@@ -135,15 +109,7 @@ const deleteGoal = async (GoalId) => {
 
 const fetchUsername = async () => {
     try {
-        const token = localStorage.getItem(AUTH_TOKEN);
-
-        const result = await axios.get(
-            `${baseURL}/user/username`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+        const result = await authFetch.get('/user/username')
 
         return result.data;
     } catch (error) {

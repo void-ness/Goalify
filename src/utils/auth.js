@@ -1,17 +1,40 @@
-import axios from "axios";
-import { AUTH_TOKEN } from "../constants";
+import { publicFetch, authFetch } from "./axios";
 
-const baseURL = process.env.REACT_APP_BASE_URL;
+const isValidUser = async () => {
+    try {
+        const result = await authFetch.get(
+            '/user/authenticate'
+        );
 
-const isValidUser = () => {
-    const token = localStorage.getItem(AUTH_TOKEN);
+        return result.data;
+    } catch (error) {
+        const errorMsg = error.response?.data.error?.message;
 
-    if (!token) return false;
-
-    return true;
+        if (errorMsg) {
+            throw new Error(errorMsg)
+        } else {
+            throw new Error("Session Expired");
+        }
+    }
 }
 
-// should return a token on successful login
+const logoutUser = async () => {
+    try {
+        const result = await authFetch.post('/user/logout');
+
+        return (result.data);
+    } catch (error) {
+        const errorMsg = error.response?.data.error?.message;
+
+        if (errorMsg) {
+            throw new Error(errorMsg)
+        } else {
+            throw new Error("Logout Unsuccessful");
+        }
+    }
+}
+
+// should set a cookie with authToken on successful login
 // an error of invalid credentials if login not successful
 const loginUser = async (user) => {
     try {
@@ -24,14 +47,14 @@ const loginUser = async (user) => {
             password: user.pass
         };
 
-        const result = await axios.post(
-            `${baseURL}/user/login`,
+        const result = await publicFetch.post(
+            '/user/login',
             data
         );
 
-        return result;
+        return result.data;
     } catch (error) {
-        const errorMsg = error.response?.data.error.message;
+        const errorMsg = error.response?.data.error?.message;
 
         if (errorMsg) {
             throw new Error(errorMsg)
@@ -54,11 +77,11 @@ const registerUser = async (user) => {
             username: user.username
         };
 
-        const result = await axios.post(`${baseURL}/user/register`, data);
+        const result = await publicFetch.post('/user/register', data);
 
-        return result;
+        return result.data;
     } catch (error) {
-        const errorMsg = error.response?.data.error.message;
+        const errorMsg = error.response?.data.error?.message;
 
         if (errorMsg || error.message) {
             throw new Error(errorMsg ? errorMsg : error.message);
@@ -68,4 +91,9 @@ const registerUser = async (user) => {
     }
 }
 
-export { loginUser, registerUser, isValidUser };
+export {
+    loginUser,
+    logoutUser,
+    registerUser,
+    isValidUser
+};
