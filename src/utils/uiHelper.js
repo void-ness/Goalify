@@ -1,4 +1,5 @@
 import { fetchData, addGoal, updateGoal, deleteGoal, fetchUsername } from "./api.js";
+import { loginUser, logoutUser, registerUser } from "./auth.js";
 
 const renderGoals = (setGoals) => {
     fetchData()
@@ -150,11 +151,73 @@ const renderShareLink = (setShareLink, setLinkDialogOpen, linkDialogOpen) => {
         })
 }
 
+const handleLogout = (navigate) => {
+    logoutUser()
+        .then((response) => {
+            if (response.ok) {
+                navigate('/broken');
+            }
+
+            else {
+                throw Error("logout failed")
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+}
+
+const handleLogin = (formData, setErrorData, navigate) => {
+    loginUser(formData)
+        .then((response) => {
+            if (response.ok) {
+                setErrorData({
+                    state: false,
+                    msg: ""
+                })
+                navigate('/fix');
+            }
+        })
+        .catch((err) => {
+            setErrorData({
+                state: true,
+                msg: err.message
+            });
+
+            console.error(err);
+        })
+}
+
+const handleRegistration = (formData, setErrorData, navigate) => {
+    registerUser(formData)
+        .then((response) => {
+            if (response.ok) {
+                setErrorData({
+                    state: false,
+                    msg: ""
+                })
+                navigate('/fix');
+            }
+        })
+        .catch((err) => {
+            setErrorData({
+                state: true,
+                msg: err.message
+            });
+
+            console.error(err);
+        })
+}
+
+
 export {
     handleGoalAddition,
     handleGoalDeletion,
     handleGoalUpdation,
     handleGoalPositionUpdation,
+    handleLogout,
+    handleLogin,
+    handleRegistration,
     renderGoals,
     renderShareLink
 }
