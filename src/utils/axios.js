@@ -32,11 +32,11 @@ authFetch.interceptors.response.use(
     (response) => {
         return response;
     },
-    async (error) => {
+    async (resError) => {
         try {
-            const origRequest = error.config;
+            const origRequest = resError.config;
 
-            if (error.response.status === 403 && !origRequest._retry) {
+            if (resError.response.status === 403 && !origRequest._retry) {
                 origRequest._retry = true;
                 const response = await refreshToken();
 
@@ -46,10 +46,11 @@ authFetch.interceptors.response.use(
             }
 
             else {
-                return Promise.reject(error);
+                return Promise.reject(resError);
             }
         } catch (error) {
-            console.error(error);
+            return Promise.reject(error);
+            // console.error(error);
         }
 
     }
