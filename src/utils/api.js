@@ -74,7 +74,6 @@ const updateGoal = async (goal) => {
 
         return results.data;
     } catch (error) {
-        console.log(error);
         const errorMsg = error.response?.data.error?.message;
 
         if (errorMsg) {

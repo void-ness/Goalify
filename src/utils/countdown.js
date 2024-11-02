@@ -1,5 +1,5 @@
 function updateTimerValue(setTime) {
-    let finalDate = new Date('2025-01-01 12:00 AM');
+    let finalDate = new Date('2025-01-01 00:00');
     let currDate = new Date();
     let timeDiff = finalDate.getTime() - currDate.getTime();
 
