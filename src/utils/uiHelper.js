@@ -155,6 +155,8 @@ const handleLogout = (navigate) => {
     logoutUser()
         .then((response) => {
             if (response.ok) {
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("refreshToken");
                 navigate('/broken');
             }
 
@@ -175,6 +177,8 @@ const handleLogin = (formData, setErrorData, navigate) => {
                     state: false,
                     msg: ""
                 })
+                localStorage.setItem("authToken", response.token);
+                localStorage.setItem("refreshToken", response.refreshToken);
                 navigate('/fix');
             }
         })
@@ -196,6 +200,8 @@ const handleRegistration = (formData, setErrorData, navigate) => {
                     state: false,
                     msg: ""
                 })
+                localStorage.setItem("authToken", response.token);
+                localStorage.setItem("refreshToken", response.refreshToken);
                 navigate('/fix');
             }
         })

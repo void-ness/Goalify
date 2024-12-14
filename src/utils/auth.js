@@ -36,8 +36,14 @@ const logoutUser = async () => {
 
 const refreshToken = async () => {
     try {
-        const result = await authFetch.post('/user/refresh');
+        const result = await authFetch.post('/user/refresh', null, {
+            headers: {
+                ...authFetch.defaults.headers,
+                'x-refresh-token': `Bearer ${localStorage.getItem("refreshToken")}`
 
+            }
+        });
+        localStorage.setItem("authToken", result.data.token);
         return result.data;
     } catch (error) {
         const errorMsg = error.response?.data.error?.message;
