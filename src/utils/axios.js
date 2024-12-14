@@ -6,8 +6,7 @@ const baseURL = process.env.REACT_APP_BASE_URL;
 const authFetch = axios.create({
     baseURL: `${baseURL}`,
     headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("authToken")}`
+        "Content-Type": "application/json"
     }
 })
 
@@ -21,6 +20,11 @@ const publicFetch = axios.create({
 
 authFetch.interceptors.request.use(
     async (config) => {
+        // Dynamically set the Authorization header at runtime
+        const token = localStorage.getItem("authToken");
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
         // config.withCredentials = true;
         return config;
     },
@@ -42,18 +46,21 @@ authFetch.interceptors.response.use(
                 const response = await refreshToken();
 
                 if (response.ok) {
+                    // Ensure the response is valid JSON
+                    const data = await response.json();
+                    // Update the token in localStorage
+                    localStorage.setItem("authToken", data.newToken);
+                    // Update the Authorization header
+                    origRequest.headers["Authorization"] = `Bearer ${data.newToken}`;
                     return authFetch(origRequest);
                 }
-            }
-
-            else {
+            } else {
                 return Promise.reject(resError);
             }
         } catch (error) {
             return Promise.reject(error);
             // console.error(error);
         }
-
     }
 )
 
