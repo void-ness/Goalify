@@ -16,12 +16,12 @@ const publicFetch = axios.create({
     headers: {
         "Content-Type": "application/json",
     },
-    withCredentials: true
+    // withCredentials: true/
 })
 
 authFetch.interceptors.request.use(
     async (config) => {
-        config.withCredentials = true;
+        // config.withCredentials = true;
         return config;
     },
     (error) => {
