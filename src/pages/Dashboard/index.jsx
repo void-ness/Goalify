@@ -29,14 +29,19 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [linkDialogOpen, setLinkDialogOpen] = useState(false);
     const [shareLink, setShareLink] = useState("");
+    const [archiveOpen, setArchiveOpen] = useState(false);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const navigate = useNavigate();
 
     useEffect(() => {
-        const currentYear = new Date().getFullYear();
+        fetchGoals(selectedYear);
+    }, [selectedYear]);
+
+    const fetchGoals = (year) => {
         isValidUser()
             .then((response) => {
                 if (response.ok) {
-                    renderGoals(setGoals, currentYear);
+                    renderGoals(setGoals, year);
                 } else {
                     navigate('/broken');
                 }
@@ -47,11 +52,18 @@ const Dashboard = () => {
             })
             .finally(() => {
                 setLoading(false);
-            })
-    }, [])
+            });
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
+    };
+
+    const onClickArchive = () => {
+        if (archiveOpen) {
+            setSelectedYear(new Date().getFullYear());
+        }
+        setArchiveOpen(!archiveOpen);
     };
 
     const onDragEnd = (result) => {
@@ -73,7 +85,7 @@ const Dashboard = () => {
 
         handleGoalPositionUpdation(goals, setGoals, source.index, destination.index);
         setGoals(updatedGoals);
-    }
+    };
 
     return (
         <>
@@ -85,8 +97,32 @@ const Dashboard = () => {
                             <CountDownBoxContainer />
                         </div>
 
+                        <div className="archiveContainer w-5/6 md:w-7/12 mx-auto mt-16 mb-6 flex justify-between items-start">
+                            {archiveOpen && (
+                                <div className="flex items-center bg-black/25 hover:bg-black/50 rounded-lg px-6 py-2 transition-all ease-in">
+                                    <label htmlFor="year" className="mr-2">Select Year:</label>
+                                    <select
+                                        id="year"
+                                        value={selectedYear}
+                                        onChange={(e) => setSelectedYear(e.target.value)}
+                                        className="bg-white/20 focus:bg-black/50 text-white rounded-md p-1"
+                                    >
+                                        {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).reverse().map(year => (
+                                            <option key={year} value={year} className="text-gray">{year}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+                            <button
+                                className="text-white bg-black/25 hover:bg-black/50 px-4 py-2 rounded-lg transition-all ease-in ml-auto"
+                                onClick={onClickArchive}
+                            >
+                                {archiveOpen ? "Hide Archived Goals" : "Archived Goals"}
+                            </button>
+                        </div>
+
                         <DragDropContext onDragEnd={onDragEnd}>
-                            <div className="goalsContainer w-5/6 md:w-7/12 mx-auto flex flex-col mt-16">
+                            <div className="goalsContainer w-5/6 md:w-7/12 mx-auto flex flex-col">
                                 <Droppable droppableId="goals-container">
                                     {(provided) => (
                                         <div className="flex flex-col"
