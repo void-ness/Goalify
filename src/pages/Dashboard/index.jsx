@@ -32,12 +32,12 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const currentYear = new Date().getFullYear();
         isValidUser()
             .then((response) => {
                 if (response.ok) {
-                    renderGoals(setGoals);
-                }
-                else {
+                    renderGoals(setGoals, currentYear);
+                } else {
                     navigate('/broken');
                 }
             })

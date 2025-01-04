@@ -1,8 +1,8 @@
 import { fetchData, addGoal, updateGoal, deleteGoal, fetchUsername } from "./api.js";
 import { loginUser, logoutUser, registerUser } from "./auth.js";
 
-const renderGoals = (setGoals) => {
-    fetchData()
+const renderGoals = (setGoals, year) => {
+    fetchData(year)
         .then((data) => {
             if (data) {
                 setGoals(data);
@@ -227,4 +227,3 @@ export {
     renderGoals,
     renderShareLink
 }
-

@@ -23,9 +23,11 @@ const fetchPendingData = async (username) => {
 }
 
 //fetching goals protected behind authentication wall
-const fetchData = async () => {
+const fetchData = async (year) => {
     try {
-        const results = await authFetch.get('/goals');
+        const results = await authFetch.get('/goals', {
+            params: { year }
+        });
         return results.data;
     } catch (error) {
         const errorMsg = error.response?.data.error.message;
