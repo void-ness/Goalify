@@ -97,15 +97,21 @@ const Dashboard = () => {
                             <CountDownBoxContainer />
                         </div>
 
-                        <div className="archiveContainer w-5/6 md:w-7/12 mx-auto mt-16 mb-6 flex justify-between items-start">
+                        <div className="archiveContainer w-5/6 md:w-7/12 mx-auto mt-16 mb-6 flex md:flex-row-reverse flex-row justify-between items-center md:items-start">
+                            <button
+                                className="text-white bg-black/25 hover:bg-black/50 px-4 py-2 rounded-lg transition-all ease-in"
+                                onClick={onClickArchive}
+                            >
+                                {archiveOpen ? "Hide Archived Goals" : "Archived Goals"}
+                            </button>
                             {archiveOpen && (
-                                <div className="flex items-center bg-black/25 hover:bg-black/50 rounded-lg px-6 py-2 transition-all ease-in">
-                                    <label htmlFor="year" className="mr-2">Select Year:</label>
+                                <div className="flex items-center bg-black/25 hover:bg-black/50 rounded-lg md:px-6 md:py-2 transition-all ease-in">
+                                    <label htmlFor="year" className="mr-2 hidden md:inline">Select Year:</label>
                                     <select
                                         id="year"
                                         value={selectedYear}
                                         onChange={(e) => setSelectedYear(e.target.value)}
-                                        className="bg-white/20 focus:bg-black/50 text-white rounded-md p-1"
+                                        className="bg-white/20 focus:bg-black/50 text-white rounded-md py-2 px-2 md:p-1"
                                     >
                                         {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).reverse().map(year => (
                                             <option key={year} value={year} className="text-gray">{year}</option>
@@ -113,12 +119,6 @@ const Dashboard = () => {
                                     </select>
                                 </div>
                             )}
-                            <button
-                                className="text-white bg-black/25 hover:bg-black/50 px-4 py-2 rounded-lg transition-all ease-in ml-auto"
-                                onClick={onClickArchive}
-                            >
-                                {archiveOpen ? "Hide Archived Goals" : "Archived Goals"}
-                            </button>
                         </div>
 
                         <DragDropContext onDragEnd={onDragEnd}>
