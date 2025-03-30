@@ -64,7 +64,7 @@ authFetch.interceptors.response.use(
                     // If refresh failed, clear token and redirect
                     localStorage.removeItem('authToken')
                     window.location.href = '/login'
-                    return Promise.reject(error)
+                    return Promise.reject(resError)
                 } catch (refreshError) {
                     // If refresh failed, clear token and redirect
                     localStorage.removeItem('authToken')
