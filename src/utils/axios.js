@@ -41,22 +41,39 @@ authFetch.interceptors.response.use(
         try {
             const origRequest = resError.config;
 
-            if (resError.response.status === 403 && !origRequest._retry) {
-                origRequest._retry = true;
-                const response = await refreshToken();
-
-                if (response.ok) {
-                    // Ensure the response is valid JSON
-                    const data = await response.json();
-                    // Update the token in localStorage
-                    localStorage.setItem("authToken", data.newToken);
-                    // Update the Authorization header
-                    origRequest.headers["Authorization"] = `Bearer ${data.newToken}`;
-                    return authFetch(origRequest);
-                }
-            } else {
-                return Promise.reject(resError);
+            if (resError.response?.status === 403 && origRequest._retry) {
+                // Both tokens are expired, clear storage and redirect to login
+                localStorage.removeItem('authToken')
+                localStorage.removeItem('refreshToken')
+                window.location.href = '/login'
+                return Promise.reject(resError)
             }
+
+            if (resError.response.status === 403 && !origRequest._retry) {
+                // this is getting triggered when refresh request is failing too
+                origRequest._retry = true;
+
+                try {
+                    const response = await refreshToken()
+                    if (response.ok) {
+                        const data = await response.json();
+                        localStorage.setItem('authToken', data.newToken);
+                        origRequest.headers['Authorization'] = `Bearer ${data.newToken}`;
+                        return authFetch(origRequest);
+                    }
+                    // If refresh failed, clear token and redirect
+                    localStorage.removeItem('authToken')
+                    window.location.href = '/login'
+                    return Promise.reject(error)
+                } catch (refreshError) {
+                    // If refresh failed, clear token and redirect
+                    localStorage.removeItem('authToken')
+                    window.location.href = '/login'
+                    return Promise.reject(refreshError)
+                }
+            }
+
+            return Promise.reject(resError);
         } catch (error) {
             return Promise.reject(error);
             // console.error(error);
