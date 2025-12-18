@@ -42,10 +42,10 @@ authFetch.interceptors.response.use(
             const origRequest = resError.config;
 
             if (resError.response?.status === 403 && origRequest._retry) {
-                // Both tokens are expired, clear storage and redirect to login
+                // Both tokens are expired, clear storage and redirect to broken
                 localStorage.removeItem('authToken')
                 localStorage.removeItem('refreshToken')
-                window.location.href = '/login'
+                window.location.href = '/broken'
                 return Promise.reject(resError)
             }
 
@@ -54,7 +54,7 @@ authFetch.interceptors.response.use(
                 if (origRequest.url === '/user/refresh') {
                     localStorage.removeItem('authToken')
                     localStorage.removeItem('refreshToken')
-                    window.location.href = '/login'
+                    window.location.href = '/broken'
                     return Promise.reject(resError)
                 }
 
@@ -68,7 +68,7 @@ authFetch.interceptors.response.use(
                         // If token refresh didn't set a new token, clear and redirect
                         localStorage.removeItem('authToken')
                         localStorage.removeItem('refreshToken')
-                        window.location.href = '/login'
+                        window.location.href = '/broken'
                         return Promise.reject(new Error('Token refresh failed'))
                     }
                     origRequest.headers['Authorization'] = `Bearer ${newToken}`;
@@ -77,7 +77,7 @@ authFetch.interceptors.response.use(
                     // If refresh failed, clear token and redirect
                     localStorage.removeItem('authToken')
                     localStorage.removeItem('refreshToken')
-                    window.location.href = '/login'
+                    window.location.href = '/broken'
                     return Promise.reject(refreshError)
                 }
             }
