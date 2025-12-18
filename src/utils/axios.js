@@ -51,7 +51,7 @@ authFetch.interceptors.response.use(
 
             if (resError.response.status === 403 && !origRequest._retry) {
                 // Don't retry if this is the refresh token request itself to prevent infinite loop
-                if (origRequest.url?.endsWith('/user/refresh')) {
+                if (origRequest.url === '/user/refresh') {
                     localStorage.removeItem('authToken')
                     localStorage.removeItem('refreshToken')
                     window.location.href = '/login'
