@@ -42,33 +42,42 @@ authFetch.interceptors.response.use(
             const origRequest = resError.config;
 
             if (resError.response?.status === 403 && origRequest._retry) {
-                // Both tokens are expired, clear storage and redirect to login
+                // Both tokens are expired, clear storage and redirect to broken
                 localStorage.removeItem('authToken')
                 localStorage.removeItem('refreshToken')
-                window.location.href = '/login'
+                window.location.href = '/broken'
                 return Promise.reject(resError)
             }
 
             if (resError.response.status === 403 && !origRequest._retry) {
-                // this is getting triggered when refresh request is failing too
+                // Don't retry if this is the refresh token request itself to prevent infinite loop
+                if (origRequest.url === '/user/refresh') {
+                    localStorage.removeItem('authToken')
+                    localStorage.removeItem('refreshToken')
+                    window.location.href = '/broken'
+                    return Promise.reject(resError)
+                }
+
                 origRequest._retry = true;
 
                 try {
-                    const response = await refreshToken()
-                    if (response.ok) {
-                        const data = await response.json();
-                        localStorage.setItem('authToken', data.newToken);
-                        origRequest.headers['Authorization'] = `Bearer ${data.newToken}`;
-                        return authFetch(origRequest);
+                    await refreshToken()
+                    // refreshToken() already updates localStorage with new authToken
+                    const newToken = localStorage.getItem('authToken');
+                    if (!newToken) {
+                        // If token refresh didn't set a new token, clear and redirect
+                        localStorage.removeItem('authToken')
+                        localStorage.removeItem('refreshToken')
+                        window.location.href = '/broken'
+                        return Promise.reject(new Error('Token refresh failed'))
                     }
-                    // If refresh failed, clear token and redirect
-                    localStorage.removeItem('authToken')
-                    window.location.href = '/login'
-                    return Promise.reject(resError)
+                    origRequest.headers['Authorization'] = `Bearer ${newToken}`;
+                    return authFetch(origRequest);
                 } catch (refreshError) {
                     // If refresh failed, clear token and redirect
                     localStorage.removeItem('authToken')
-                    window.location.href = '/login'
+                    localStorage.removeItem('refreshToken')
+                    window.location.href = '/broken'
                     return Promise.reject(refreshError)
                 }
             }
