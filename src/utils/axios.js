@@ -51,7 +51,7 @@ authFetch.interceptors.response.use(
 
             if (resError.response.status === 403 && !origRequest._retry) {
                 // Don't retry if this is the refresh token request itself to prevent infinite loop
-                if (origRequest.url?.includes('/user/refresh')) {
+                if (origRequest.url?.endsWith('/user/refresh')) {
                     localStorage.removeItem('authToken')
                     localStorage.removeItem('refreshToken')
                     window.location.href = '/login'
@@ -64,6 +64,13 @@ authFetch.interceptors.response.use(
                     await refreshToken()
                     // refreshToken() already updates localStorage with new authToken
                     const newToken = localStorage.getItem('authToken');
+                    if (!newToken) {
+                        // If token refresh didn't set a new token, clear and redirect
+                        localStorage.removeItem('authToken')
+                        localStorage.removeItem('refreshToken')
+                        window.location.href = '/login'
+                        return Promise.reject(new Error('Token refresh failed'))
+                    }
                     origRequest.headers['Authorization'] = `Bearer ${newToken}`;
                     return authFetch(origRequest);
                 } catch (refreshError) {
